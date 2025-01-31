@@ -1,0 +1,25 @@
+{
+  "name": "tunemate_cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FaridZimmermann/tunemate_cli.git"
+  },
+  "keywords": [
+    "music",
+    "keyfinder",
+    "tuner",
+    "cli"
+  ],
+  "author": "Farid Zimmermann",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FaridZimmermann/tunemate_cli/issues"
+  },
+  "homepage": "https://github.com/FaridZimmermann/tunemate_cli#readme"
+}

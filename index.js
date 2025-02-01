@@ -1,5 +1,5 @@
-const { program } = require("commander");
-const { analyzeKey } = require("./keyAnalyzer");
+import {program} from "commander";
+import { analyzeKey } from "./helpers/keyAnalyzer.js";
 
 program.version("1.0.0").description("TuneMate CLI - Analyze songs, find keys, and more");
 

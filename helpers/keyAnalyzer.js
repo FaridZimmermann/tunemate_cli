@@ -19,9 +19,10 @@ async function analyzeKey(filePath) {
     }
     
     const spinner = ora('Processing audio file...').start();   //start loading spinner
-    const tempWavPath = path.join(__dirname, 'temp.wav');
+    const tempWavPath = path.join(path.resolve(), 'temp.wav');
     
     try {
+
         //convert if file is mp3 to wav file
         await convertToWav(filePath, tempWavPath);
         spinner.text = 'Analyzing key with Meyda...';
@@ -39,7 +40,7 @@ async function analyzeKey(filePath) {
 }
 
 function convertToWav(inputPath, outputPath) {
-    return new Promise((resolve, reject) => {
+     return new Promise((resolve, reject) => {
         ffmpeg(inputPath)
             .toFormat('wav')
             .on('end', () => resolve())
@@ -50,6 +51,7 @@ function convertToWav(inputPath, outputPath) {
 
 async function runMeyda(audioPath) {
     const buffer = fs.readFileSync(audioPath);
+    console.log(buffer)
     const decoded = await wav.decode(buffer);
     const audioData = decoded.channelData[0]; // Extract first channel
 

@@ -4,9 +4,10 @@ import path from "path";
 import ora from "ora";
 import chalk from "chalk";
 import ffmpeg from "fluent-ffmpeg";
-import Meyda from "meyda";
+import Pitchfinder from "pitchfinder";
 import wav from "wav-decoder";
 
+const detectPitch = Pitchfinder.DynamicWavelet();
 
 
 async function analyzeKey(filePath) {
@@ -25,12 +26,16 @@ async function analyzeKey(filePath) {
 
         //convert if file is mp3 to wav file
         await convertToWav(filePath, tempWavPath);
-        spinner.text = 'Analyzing key with Meyda...';
+        spinner.text = 'Analyzing key...';
         
 
-        const result = await runMeyda(tempWavPath);
+        const buffer = await fs.readFile(tempWavPath);
+        const decoded = await wav.decode(buffer);
+        const float32Array = decoded.channelData[0]; 
+        const pitch = detectPitch(float32Array); 
+        console.log(pitch)
         
-        spinner.succeed(`Estimated key: ${chalk.green(result.key)}`);
+        spinner.succeed(`Estimated key: ${chalk.green(pitch)}`);
     } catch (error) {
         spinner.fail(chalk.red('Failed to analyze the key.'));
         console.error(error.message);
@@ -49,17 +54,7 @@ function convertToWav(inputPath, outputPath) {
     });
 }
 
-async function runMeyda(audioPath) {
-    const buffer = fs.readFileSync(audioPath);
-    console.log(buffer)
-    const decoded = await wav.decode(buffer);
-    const audioData = decoded.channelData[0]; // Extract first channel
 
-    const features = Meyda.extract(['chroma'], audioData);
-    
-    const key = estimateKey(features.chroma);
-    return { key };
-}
 
 function estimateKey(chroma) {
     const keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
